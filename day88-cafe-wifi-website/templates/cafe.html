@@ -1,0 +1,89 @@
+{% include "header.html" %}
+
+<div class="container px-4 py-5">
+    <h2 class="pb-2 border-bottom">{{ cafe.name }}</h2>
+
+    <div class="row row-cols-1 row-cols-md-2 align-items-md-center g-5 py-5">
+        <div class="col d-flex flex-column align-items-start gap-2">
+            <img class="img-fluid" src="{{ cafe.img_url }}" />
+        </div>
+
+        <div class="col">
+            <div class="row row-cols-1 row-cols-sm-2 g-4">
+                <div class="col d-flex flex-column gap-2">
+                    <div class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+                    </div>
+                    <h4 class="fw-semibold mb-0 text-body-emphasis">Location</h4>
+                    <p class="text-body-secondary">{{ cafe.location }}</p>
+                    <p class="text-body-secondary"><a href="{{ cafe.map_url }}">Map Link</a></p>
+                </div>
+
+                <div class="col d-flex flex-column gap-2">
+                    <div class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+                    </div>
+                    <h4 class="fw-semibold mb-0 text-body-emphasis">Ammenities</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item">Plug sockets: {{'✅' if cafe.has_sockets==1 else '❌'}}</li>
+                        <li class="list-group-item">Toilets: {{'✅' if cafe.has_toilet==1 else '❌'}}</li>
+                        <li class="list-group-item">Wifi: {{'✅' if cafe.has_wifi==1 else '❌'}}</li>
+                        <li class="list-group-item">Can you take calls? {{'✅' if cafe.can_take_calls==1 else '❌'}}</li>
+                    </ul>
+                </div>
+
+                <div class="col d-flex flex-column gap-2">
+                    <div class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+                    </div>
+                    <h4 class="fw-semibold mb-0 text-body-emphasis">Available seats</h4>
+                    <p class="text-body-secondary">{{cafe.seats}}</p>
+                </div>
+
+                <div class="col d-flex flex-column gap-2">
+                    <div class="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
+                    </div>
+                    <h4 class="fw-semibold mb-0 text-body-emphasis">Average coffee price</h4>
+                    <p class="text-body-secondary">{{cafe.coffee_price}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Comments section below -->
+<h2 class="pb-2 px-3 border-bottom">Comments</h2>
+<div class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center">
+    <div class="list-group w-75">
+        {% for comment in cafe.comments %}
+        <div class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+            <!-- <img src="https://github.com/twbs.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0"> -->
+            <div class="d-flex gap-2 w-100 justify-content-between">
+                <div>
+                    <h5 class="mb-0">{{ comment.author.username }} - {{comment.author.role.title() }}
+                        {% if current_user.is_authenticated and (current_user.role=="admin" or current_user.role=="moderator") %}
+                        <a class="btn btn-outline-primary" href="{{ url_for('delete_comment', cafe_id=cafe.id, comment_id=comment.id) }}">Delete</a>
+                        {% endif %}
+                    </h5>
+                    <p class="mb-2">{{ comment.body|safe }}</p>
+                </div>
+                <small class="opacity-50 text-nowrap">{{ comment.timestamp }}</small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- New comment form -->
+{% if current_user.is_authenticated %}
+<main class="w-50 m-auto">
+    <form action="{{ url_for('show_cafe', cafe_id=cafe.id) }}" method="post">
+        {{ form.csrf_token }}
+        {{ ckeditor.load() }}
+        {{ ckeditor.config(name='comment') }}
+        <div class="mb-3 p-3 form-control">
+            <h1 class="h3 mb-3 fw-normal">Leave a comment</h1>
+            {{ form.comment }}
+            {{ form.submit(class="my-2") }}
+        </div>
+    </form>
+</main>
+{% endif %}
+
+{% include "footer.html" %}

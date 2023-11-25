@@ -1,0 +1,114 @@
+{% include "header.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+<div class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center">
+    <main class="form w-50 m-auto">
+        {% if editing!=True %}
+        <form action="{{ url_for('add_cafe') }}" method="post">
+            {{ form.csrf_token }}
+            {% if editing==True %}
+            <h1 class="h2 mb-3 fw-normal">Edit cafe</h1>
+            {% else %}
+            <h1 class="h2 mb-3 fw-normal">Add new cafe</h1>
+            {% endif %}
+            <div class="mb-3">
+                {{ form.name.label(class="form-label", for="name") }}
+                {{ form.name(class="form-control", for="name") }}
+            </div>
+            <div class="mb-3">
+                {{ form.map_url.label(class="form-label", for="map_url") }}
+                {{ form.map_url(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.img_url.label(class="form-label", for="img_url") }}
+                {{ form.img_url(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.location.label(class="form-label", for="location") }}
+                {{ form.location(class="form-control") }}
+            </div>
+            <div class="form-control my-2">
+                <h4 class="mb-3">Cafe facilities</h4>
+                <div class="mb-3 form-check form-switch">
+                    {{ form.has_sockets.label(class="form-label", for="has_socket") }}
+                    {{ form.has_sockets(class="form-check-input", role="switch")}}
+                </div>
+                <div class="mb-3 form-check form-switch">
+                    {{ form.has_toilet.label(class="form-label", for="has_socket") }}
+                    {{ form.has_toilet(class="form-check-input", role="switch")}}
+                </div>
+                <div class="mb-3 form-check form-switch">
+                    {{ form.has_wifi.label(class="form-label", for="has_socket") }}
+                    {{ form.has_wifi(class="form-check-input", role="switch")}}
+                </div>
+                <div class="mb-3 form-check form-switch">
+                    {{ form.can_take_calls.label(class="form-label", for="has_socket") }}
+                    {{ form.can_take_calls(class="form-check-input", role="switch")}}
+                </div>
+            </div>
+            <div class="mb-3">
+                {{ form.seats.label(class="form-label", for="seats") }}
+                {{ form.seats(class="form-select") }}
+            </div>
+            <div class="mb-3">
+                {{ form.coffee_price.label(class="form-label", for="coffee_price") }}
+                {{ form.coffee_price(class="form-control") }}
+            </div>
+            {{ form.submit(class="btn btn-primary w-100 py-2") }}
+        </form>
+        {% else %}
+        <form action="{{ url_for('edit_cafe', cafe_id=cafe_id) }}" method="post">
+            {{ form.csrf_token }}
+            {% if editing==True %}
+            <h1 class="h2 mb-3 fw-normal">Edit cafe</h1>
+            {% else %}
+            <h1 class="h2 mb-3 fw-normal">Add new cafe</h1>
+            {% endif %}
+            <div class="mb-3">
+                {{ form.name.label(class="form-label", for="name") }}
+                {{ form.name(class="form-control", for="name") }}
+            </div>
+            <div class="mb-3">
+                {{ form.map_url.label(class="form-label", for="map_url") }}
+                {{ form.map_url(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.img_url.label(class="form-label", for="img_url") }}
+                {{ form.img_url(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.location.label(class="form-label", for="location") }}
+                {{ form.location(class="form-control") }}
+            </div>
+            <div class="form-control my-2">
+                <h4 class="mb-3">Cafe facilities</h4>
+                <div class="mb-3 form-check form-switch">
+                    {{ form.has_sockets.label(class="form-label", for="has_socket") }}
+                    {{ form.has_sockets(class="form-check-input", role="switch")}}
+                </div>
+                <div class="mb-3 form-check form-switch">
+                    {{ form.has_toilet.label(class="form-label", for="has_socket") }}
+                    {{ form.has_toilet(class="form-check-input", role="switch")}}
+                </div>
+                <div class="mb-3 form-check form-switch">
+                    {{ form.has_wifi.label(class="form-label", for="has_socket") }}
+                    {{ form.has_wifi(class="form-check-input", role="switch")}}
+                </div>
+                <div class="mb-3 form-check form-switch">
+                    {{ form.can_take_calls.label(class="form-label", for="has_socket") }}
+                    {{ form.can_take_calls(class="form-check-input", role="switch")}}
+                </div>
+            </div>
+            <div class="mb-3">
+                {{ form.seats.label(class="form-label", for="seats") }}
+                {{ form.seats(class="form-select") }}
+            </div>
+            <div class="mb-3">
+                {{ form.coffee_price.label(class="form-label", for="coffee_price") }}
+                {{ form.coffee_price(class="form-control") }}
+            </div>
+            {{ form.submit(class="btn btn-primary w-100 py-2") }}
+        </form>
+        {% endif %}
+    </main>
+</div>
+{% include "footer.html" %}
